@@ -1,0 +1,5 @@
+{
+  "name": "claude-usage-rings",
+  "owner": { "name": "GB2G" },
+  "plugins": [{ "name": "usage-rings", "source": "./" }]
+}

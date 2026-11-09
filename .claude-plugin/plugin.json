@@ -1,0 +1,7 @@
+{
+  "name": "usage-rings",
+  "version": "0.1.0",
+  "description": "Shows every usage limit as a progress ring in the band above the prompt, from the first moment of a session.",
+  "types": "./types/index.d.ts",
+  "license": "MIT"
+}
