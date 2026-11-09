@@ -106,7 +106,7 @@ const progressOf = (t: Task, now: number): Progress => {
     return {
       fraction,
       label,
-      eta: left > 0 ? `~${fmt(left)} left (est.)` : 'taking longer than estimated',
+      eta: left > 0 ? `~${fmt(left)} left` : 'taking longer than estimated',
     }
   }
   if (t.typicalMs > 0) {
@@ -115,21 +115,21 @@ const progressOf = (t: Task, now: number): Progress => {
     return {
       fraction,
       label: 'Working',
-      eta: left > 0 ? `~${fmt(left)} left (est.)` : 'taking longer than usual',
+      eta: left > 0 ? `~${fmt(left)} left` : 'taking longer than usual',
     }
   }
   return { fraction: null, label: 'Working', eta: `${fmt(elapsed)} elapsed` }
 }
 
 const textBar = (fraction: number | null) => {
-  const width = 20
+  const width = 12
   if (fraction === null) return '·'.repeat(width)
   const on = Math.round(fraction * width)
   return '█'.repeat(on) + '░'.repeat(width - on)
 }
 
 const barSvg = (fraction: number | null) => {
-  const w = 220
+  const w = 72
   const fill = fraction === null ? 0 : Math.round(w * fraction)
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="8" viewBox="0 0 ${w} 8">` +
@@ -260,7 +260,7 @@ export const register: Register = on => {
     if (e.surface === 'terminal') {
       const { Box, Text } = $.ui.resolve(e)
       return (
-        <Box flexWrap="wrap" gap={4}>
+        <Box width="100%" flexWrap="wrap" gap={4} justifyContent={hasLimits ? 'space-between' : 'flex-end'}>
           {hasLimits ? (
             <Box paddingX={1} gap={3}>
               {snap.limits.map(l => (
@@ -283,9 +283,9 @@ export const register: Register = on => {
 
     const { Box, Text, Svg } = $.ui.resolve(e)
     return (
-      <Box flexWrap="wrap" gap={6} alignItems="center">
+      <Box width="100%" flexWrap="wrap" gap={3} alignItems="center" justifyContent={hasLimits ? 'space-between' : 'flex-end'}>
         {hasLimits ? (
-          <Box paddingX={1} gap={4} alignItems="center">
+          <Box paddingX={1} gap={3} alignItems="center">
             {snap.limits.map(l => (
               <Box key={l.kind} gap={2} alignItems="center">
                 <Svg
@@ -305,12 +305,12 @@ export const register: Register = on => {
             {snap.isLive ? null : <Text dimColor>last seen</Text>}
           </Box>
         ) : null}
-                  <Box paddingX={1} gap={3} alignItems="center">
+                  <Box paddingX={1} gap={2} alignItems="center">
             <Text>{prog.label}</Text>
             <Svg
               source={barSvg(prog.fraction)}
               alt={prog.fraction === null ? prog.label : `${prog.label}, ${Math.round(prog.fraction * 100)}%`}
-              width={220}
+              width={72}
               height={8}
             />
             <Text dimColor>{prog.eta}</Text>
